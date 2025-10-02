@@ -56,6 +56,7 @@ app = FastAPI(
 origins = [
     "http://localhost:5176",  # Your React/Vite frontend URL
     "http://127.0.0.1:5176",
+    "https://uniformpatientrecord.netlify.app",
     "https://*.netlify.app",
 ]
 
