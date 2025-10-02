@@ -7,5 +7,7 @@ sqlalchemy
 psycopg2-binary    # PostgreSQL adapter
 python-jose[cryptography] # For JWT (security)
 python-multipart   # For handling form data (good practice)
-passlib[bcrypt]  # For secure password hashing
+cryptography
+passlib
+bcrypt
 Faker
