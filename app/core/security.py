@@ -11,17 +11,28 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verifies a plain password against a hashed password."""
-    # 🚨 FIX: Truncate the incoming plain_password to 72 bytes.
-    # This prevents the ValueError during login verification on unstable bcrypt backends.
-    truncated_password = plain_password.encode("utf-8")[:72].decode("utf-8", errors="ignore")
     
-    return pwd_context.verify(truncated_password, hashed_password)
+    # 1. Truncate the plain_password and encode it to bytes
+    # We must pass the original string value of the plain password to pwd_context.verify, 
+    # but we will rely on the underlying library to handle the truncation/encoding if possible.
+    # If the hash stored in the DB is based on a truncated string, we must verify against the truncated string.
+    
+    # Re-apply the truncation logic that was used during hashing (which returns a string)
+    truncated_password_str = plain_password.encode("utf-8")[:72].decode("utf-8", errors="ignore")
+    
+    # NOTE: The bcrypt handler usually prefers a string input for `verify`.
+    return pwd_context.verify(truncated_password_str, hashed_password)
 
 def get_password_hash(password: str) -> str:
     """Hashes a plain password."""
-    # This is already correct
-    truncated_password = password.encode("utf-8")[:72].decode("utf-8", errors="ignore")
-    return pwd_context.hash(truncated_password)
+    
+    # 1. Truncate the input password to 72 bytes and decode back to string
+    # This is the string form saved to the DB, ensuring consistency.
+    truncated_password_str = password.encode("utf-8")[:72].decode("utf-8", errors="ignore")
+    
+    # 2. Pass the safely truncated string to be hashed
+    # passlib/bcrypt will internally handle the final encoding for hashing.
+    return pwd_context.hash(truncated_password_str)
 
 # --- JWT Token Functions ---
 
