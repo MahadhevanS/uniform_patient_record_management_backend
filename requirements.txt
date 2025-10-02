@@ -8,6 +8,6 @@ psycopg2-binary    # PostgreSQL adapter
 python-jose[cryptography] # For JWT (security)
 python-multipart   # For handling form data (good practice)
 cryptography
-passlib
-bcrypt
+passlib==1.7.4
+bcrypt==4.1.0
 Faker
