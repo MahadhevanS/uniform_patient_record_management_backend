@@ -6,7 +6,6 @@ pydantic-settings  # Used for handling environment variables cleanly
 sqlalchemy
 psycopg2-binary    # PostgreSQL adapter
 python-jose[cryptography] # For JWT (security)
-bcrypt             # For password hashing
 python-multipart   # For handling form data (good practice)
 passlib[bcrypt]  # For secure password hashing
 Faker
